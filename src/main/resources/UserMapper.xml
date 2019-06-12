@@ -6,7 +6,13 @@
     <select id="selectUserById" parameterType="int" resultType="user">
       select id, name, age, department_id as "departmentId", phone, salary from tb_user where id = #{id}
     </select>
-    <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
       insert into tb_user(name, age, department_id, phone, salary) values(#{name}, #{age}, #{departmentId}, #{phone}, #{salary})
+    </insert>
+    <insert id="insertBatchUser" useGeneratedKeys="true" keyProperty="id">
+      insert into tb_user(name, age, department_id, phone, salary) values
+      <foreach collection="list" separator="," item="t">
+          (#{t.name}, #{t.age}, #{t.departmentId}, #{t.phone}, #{t.salary})
+      </foreach>
     </insert>
 </mapper>

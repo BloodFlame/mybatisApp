@@ -4,6 +4,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatisApp.model.User;
 
+import java.util.ArrayList;
+
 public class UserDaoImpl implements UserDao {
     private SqlSessionFactory sqlSessionFactory;
 
@@ -26,9 +28,21 @@ public class UserDaoImpl implements UserDao {
         SqlSession sqlSession = sqlSessionFactory.openSession();
         try{
             UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-            int id = mapper.insertUser(user);
+            int rows = mapper.insertUser(user);
             sqlSession.commit();
-            return id;
+            return rows;
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    public int insertBatchUser(ArrayList<User> list) {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        try{
+            UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+            int rows = mapper.insertBatchUser(list);
+            sqlSession.commit();
+            return rows;
         } finally {
             sqlSession.close();
         }
